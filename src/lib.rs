@@ -106,6 +106,28 @@ pub async fn foo3_helper(x: u32, y: u32, cache: &mut HashMap<(u32, u32), u32>) -
     }
 }
 
+// This really is dynamic programming
+pub fn foo4(x: u32, y: u32) -> u32 {
+    //let mut results = Vec::with_capacity((x+1)*(y+1));
+    // x+1 \times y+1 matrix
+    let mut results = vec![1; ((x+1)*(y+1)) as usize];
+
+    for sum in 2..(x+y+1) {
+        for i in 1..sum {
+            if i > x { break; }
+            let j = sum - i;
+            if j > y { continue; }
+            if j < 1 { break; }
+
+            results[(i+j*(x+1)) as usize] = (results[((i-1)+(j-1)*(x+1)) as usize]
+                + results[(i+(j-1)*(x+1)) as usize]
+                + results[((i-1)+j*(x+1)) as usize]) % 1000;
+        }
+    }
+
+    results[(x+y*(x+1)) as usize]
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -118,5 +140,6 @@ mod tests {
         assert_eq!(super::foo1(n, n), res);
         assert_eq!(super::foo2(n, n), res);
         assert_eq!(super::foo3(n, n), res);
+        assert_eq!(super::foo4(n, n), res);
     }
 }
