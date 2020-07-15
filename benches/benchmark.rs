@@ -1,5 +1,5 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use recursion_optimization::{foo1, foo2, foo3};
+use recursion_optimization::{foo1, foo2, foo3, foo4};
 
 fn foo(c: &mut Criterion) {
     let n = 100;
@@ -9,6 +9,8 @@ fn foo(c: &mut Criterion) {
     c.bench_function("foo2", |b| b.iter(|| foo2(n, n)));
     // using futures
     c.bench_function("foo3", |b| b.iter(|| foo3(n, n)));
+    // dynamic programming
+    c.bench_function("foo4", |b| b.iter(|| foo4(n, n)));
 }
 
 criterion_group!(benches, foo);
